@@ -41,32 +41,35 @@ export default function RootLayout({
                   <li>
                     <Link
                       href="/"
-                      className="text-gray-300 hover:text-white transition-colors"
-                    >
+                      className="text-gray-300 hover:text-white transition-colors">
                       Home
                     </Link>
                   </li>
                   <li>
                     <Link
                       href="/projects"
-                      className="text-gray-300 hover:text-white transition-colors"
-                    >
+                      className="text-gray-300 hover:text-white transition-colors">
                       Projects
                     </Link>
                   </li>
                   <li>
                     <Link
+                      href="/arcade"
+                      className="text-gray-300 hover:text-white transition-colors">
+                      Arcade
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
                       href="/resume"
-                      className="text-gray-300 hover:text-white transition-colors"
-                    >
+                      className="text-gray-300 hover:text-white transition-colors">
                       Resume
                     </Link>
                   </li>
                   <li>
                     <Link
                       href="/contact"
-                      className="text-gray-300 hover:text-white transition-colors"
-                    >
+                      className="text-gray-300 hover:text-white transition-colors">
                       Contact
                     </Link>
                   </li>

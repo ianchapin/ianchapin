@@ -32,7 +32,7 @@ const Resume: React.FC = () => {
           <ul className="list-disc ml-6 mt-2 space-y-1">
             <li>Set up multiple Okta applications, including Client Credentials and Authorization Code flows, enabling secure connections to Azure API Management endpoints.</li>
             <li>Implemented DPoP in Okta applications to mitigate token replay attacks.</li>
-            <li>Developed an Azure Function integrated with VirusTotal.com's API to scan files for malware and enforced security policies.</li>
+            <li>Developed an Azure Function integrated with VirusTotal.com&apos;s API to scan files for malware and enforced security policies.</li>
             <li>Resolved bugs and enhanced features in Azure Functions and web applications using C# and .NET.</li>
             <li>Established APIOps processes and designed build/release pipelines to streamline CI/CD practices.</li>
             <li>Integrated automated unit tests using xUnit and optimized endpoint configurations via Swagger documentation.</li>
@@ -64,7 +64,7 @@ const Resume: React.FC = () => {
           <ul className="list-disc ml-6 mt-2 space-y-1">
             <li>Developed, tested, and maintained code for various applications including scheduling, dispatching, and chat.</li>
             <li>Collaborated on integrating key third-party platforms (Bing Maps, Twilio, SendGrid, Fleetmatics) while ensuring secure key management.</li>
-            <li>Engineered a sophisticated 'Scheduling Wizard' to optimize appointment scheduling and dispatching processes.</li>
+            <li>Engineered a sophisticated &apos;Scheduling Wizard&apos; to optimize appointment scheduling and dispatching processes.</li>
           </ul>
         </div>
 
