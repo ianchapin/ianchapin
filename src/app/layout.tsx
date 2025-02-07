@@ -1,18 +1,15 @@
 // app/layout.tsx (or your corresponding layout file)
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-poppins'
+})
 
 export const metadata: Metadata = {
   title: "ianchapin.com",
@@ -26,7 +23,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${poppins.variable} ${poppins.variable} antialiased`}>
         <div className="min-h-screen flex flex-col">
           {/* Top Navigation Bar */}
           <header className="bg-gray-800">
