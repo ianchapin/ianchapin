@@ -1,31 +1,29 @@
 import React from 'react';
 import Link from 'next/link';
 
-const Arcade: React.FC = () => {
+const Projects: React.FC = () => {
   return (
     <div className="min-h-screen p-8">
       <div className="max-w-5xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-12">
-          Arcade
-        </h1>
+        <h1 className="text-4xl font-bold text-center mb-12">Projects</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <Link href="/arcade/asteroids">
+          <Link href="/projects/scheduling-wizard">
             <span className="block rounded-lg shadow-lg p-6 bg-white border border-gray-200 hover:shadow-2xl transform hover:scale-105 transition duration-300 ease-in-out">
               <h2 className="text-2xl font-semibold mb-4 text-gray-900">
-                Asteroids
+                Scheduling Wizard
               </h2>
               <p className="text-gray-700">
-                A classic space shooter game built with Next.js, TypeScript, and Canvas.
+                A tool designed to simplify and manage your scheduling needs.
               </p>
             </span>
           </Link>
-          <Link href="/arcade/snake">
+          <Link href="/projects/stryker-nbcrv-upgrade">
             <span className="block rounded-lg shadow-lg p-6 bg-white border border-gray-200 hover:shadow-2xl transform hover:scale-105 transition duration-300 ease-in-out">
               <h2 className="text-2xl font-semibold mb-4 text-gray-900">
-                Snake
+                NBCRV Upgrade
               </h2>
               <p className="text-gray-700">
-                A retro snake game built with Next.js, TypeScript, and Canvas.
+                A comprehensive upgrade project for the NBCRV platform.
               </p>
             </span>
           </Link>
@@ -35,4 +33,4 @@ const Arcade: React.FC = () => {
   );
 };
 
-export default Arcade;
+export default Projects;

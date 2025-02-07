@@ -141,7 +141,7 @@ const Resume: React.FC = () => {
       <section className="mb-8">
         <h2 className="text-2xl font-bold border-b pb-2">Certifications and Clearances</h2>
         <ul className="list-disc ml-6 mt-4 space-y-1">
-          <li>Department of Defense (DoD): Secret Security Clearance</li>
+          <li>Clearances: Must ask for this</li>
           <li>Scrum.org: Professional Scrum Master I (PSM I) Certification - Achieved on July 1, 2021</li>
         </ul>
       </section>
