@@ -4,11 +4,8 @@ const Resume: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       {/* Header */}
-      <header className="mb-8 border-b pb-4">
-        <h1 className="text-4xl font-bold">Ian Chapin</h1>
-        <p className="mt-1 text-lg">
-          <span>ianchapin@gmail.com</span> | <span>(816) 787-6075</span>
-        </p>
+      <header className="mb-8 pb-4">
+        <h1 className="text-5xl font-bold">Ian Chapin</h1>
       </header>
 
       {/* Professional Summary */}
@@ -28,7 +25,7 @@ const Resume: React.FC = () => {
           <h3 className="text-xl font-semibold">
             Blue Cross and Blue Shield of Kansas (Contract via TriCom Technical Services) – Topeka, KS
           </h3>
-          <p className="italic text-gray-600">Application Security Developer | March 2024 – October 2024</p>
+          <p className="italic">Application Security Developer | March 2024 – October 2024</p>
           <ul className="list-disc ml-6 mt-2 space-y-1">
             <li>Set up multiple Okta applications, including Client Credentials and Authorization Code flows, enabling secure connections to Azure API Management endpoints.</li>
             <li>Implemented DPoP in Okta applications to mitigate token replay attacks.</li>
@@ -47,7 +44,7 @@ const Resume: React.FC = () => {
           <h3 className="text-xl font-semibold">
             Aptora Corporation – Lenexa, KS
           </h3>
-          <p className="italic text-gray-600">Software Engineer &amp; Scrum Master | February 2021 – December 2023</p>
+          <p className="italic">Software Engineer &amp; Scrum Master | February 2021 – December 2023</p>
           <ul className="list-disc ml-6 mt-2 space-y-1">
             <li>Led the architectural transformation from VB6 to a microservice-oriented C# full-stack architecture.</li>
             <li>Integrated Blazor for the front end and .NET APIs (RESTful, JSON) for the backend on Azure.</li>
@@ -60,7 +57,7 @@ const Resume: React.FC = () => {
         {/* Aptora Corporation – Software Engineer */}
         <div className="mt-8">
           <h3 className="text-xl font-semibold">Aptora Corporation</h3>
-          <p className="italic text-gray-600">Software Engineer | February 2020 – February 2021</p>
+          <p className="italic">Software Engineer | February 2020 – February 2021</p>
           <ul className="list-disc ml-6 mt-2 space-y-1">
             <li>Developed, tested, and maintained code for various applications including scheduling, dispatching, and chat.</li>
             <li>Collaborated on integrating key third-party platforms (Bing Maps, Twilio, SendGrid, Fleetmatics) while ensuring secure key management.</li>
@@ -71,7 +68,7 @@ const Resume: React.FC = () => {
         {/* MRIGlobal */}
         <div className="mt-8">
           <h3 className="text-xl font-semibold">MRIGlobal – Kansas City, MO</h3>
-          <p className="italic text-gray-600">Associate Software Engineer | January 2018 – February 2020</p>
+          <p className="italic">Associate Software Engineer | January 2018 – February 2020</p>
           <ul className="list-disc ml-6 mt-2 space-y-1">
             <li>Developed single-page applications for sensor data visualization on maps and various UI components.</li>
             <li>Collaborated on architecture, design, and code reviews; worked onsite with clients to ensure proper integration.</li>
@@ -122,7 +119,7 @@ const Resume: React.FC = () => {
       {/* Skills */}
       <section className="mb-8">
         <h2 className="text-2xl font-bold border-b pb-2">Skills</h2>
-        <div className="mt-4 text-gray-700">
+        <div className="mt-4">
           <h3 className="text-xl font-semibold">Technologies</h3>
           <p className="mt-1">
             Web Development: .NET Framework, .NET Core, Blazor (WASM, Server), MAUI, React, NextJS, Node, Express, REST API, OData, Entity Framework, SignalR, Bootstrap, jQuery, KnockoutJS.
@@ -143,7 +140,7 @@ const Resume: React.FC = () => {
       {/* Certifications and Clearances */}
       <section className="mb-8">
         <h2 className="text-2xl font-bold border-b pb-2">Certifications and Clearances</h2>
-        <ul className="list-disc ml-6 mt-4 space-y-1 text-gray-700">
+        <ul className="list-disc ml-6 mt-4 space-y-1">
           <li>Department of Defense (DoD): Secret Security Clearance</li>
           <li>Scrum.org: Professional Scrum Master I (PSM I) Certification - Achieved on July 1, 2021</li>
         </ul>
@@ -152,7 +149,7 @@ const Resume: React.FC = () => {
       {/* Education */}
       <section className="mb-8">
         <h2 className="text-2xl font-bold border-b pb-2">Education</h2>
-        <div className="mt-4 text-gray-700">
+        <div className="mt-4">
           <h3 className="text-xl font-semibold">University of Central Missouri – Warrensburg, MO</h3>
           <p>Bachelor of Science in Computer Science - Software Development Option - Minor in Cybersecurity, May 2017</p>
           <p>GPA: 3.6 / 4.00</p>
