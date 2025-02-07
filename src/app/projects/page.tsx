@@ -27,7 +27,7 @@ const Projects: React.FC = () => {
                   NBCRV Upgrade
                 </h2>
                 <p className="text-gray-700">
-                  A classic space shooter game built with Next.js, TypeScript, and Canvas.
+                  Integrated software for the Nuclear Biological Chemical Reconnaissance Vehicle within a tight timeline.
                 </p>
               </div>
             </span>
@@ -50,7 +50,7 @@ const Projects: React.FC = () => {
                   Scheduling Wizard
                 </h2>
                 <p className="text-gray-700">
-                  A retro snake game built with Next.js, TypeScript, and Canvas.
+                  Developed an automated scheduling solution that greatly enhanced dispatch efficiency in the field service industry.
                 </p>
               </div>
             </span>
