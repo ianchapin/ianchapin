@@ -22,6 +22,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* Ensure responsive scaling on mobile devices */}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
       <body className={`${poppins.variable} antialiased`}>
         <div className="min-h-screen flex flex-col">
           {/* Navigation */}
