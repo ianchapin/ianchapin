@@ -37,13 +37,6 @@ export default function RootLayout({
                 <ul className="flex space-x-6">
                   <li>
                     <Link
-                      href="/"
-                      className="text-gray-300 hover:text-white transition-colors">
-                      Home
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
                       href="/projects"
                       className="text-gray-300 hover:text-white transition-colors">
                       Projects
