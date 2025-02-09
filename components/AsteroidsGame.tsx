@@ -125,6 +125,18 @@ class Asteroid {
     this.offsets = Array.from({ length: this.numPoints }, () => 0.7 + Math.random() * 0.3);
   }
 
+  // Added timeScale parameter to slow movement during time warp.
+  update(canvasWidth: number, canvasHeight: number, timeScale: number = 1) {
+    this.x += this.velocity.x * timeScale;
+    this.y += this.velocity.y * timeScale;
+
+    // Screen wrapping.
+    if (this.x < 0) this.x = canvasWidth;
+    if (this.x > canvasWidth) this.x = 0;
+    if (this.y < 0) this.y = canvasHeight;
+    if (this.y > canvasHeight) this.y = 0;
+  }
+
   draw(ctx: CanvasRenderingContext2D) {
     ctx.strokeStyle = "white";
     ctx.lineWidth = 2;
@@ -143,17 +155,6 @@ class Asteroid {
     ctx.closePath();
     ctx.stroke();
   }
-
-  update(canvasWidth: number, canvasHeight: number) {
-    this.x += this.velocity.x;
-    this.y += this.velocity.y;
-
-    // Screen wrapping.
-    if (this.x < 0) this.x = canvasWidth;
-    if (this.x > canvasWidth) this.x = 0;
-    if (this.y < 0) this.y = canvasHeight;
-    if (this.y > canvasHeight) this.y = 0;
-  }
 }
 
 /**
@@ -171,18 +172,21 @@ class Bullet {
     this.x = x;
     this.y = y;
     this.radius = 2;
-    const speed = 5;
+    // Increased bullet speed.
+    const speed = 10;
     this.velocity = {
       x: Math.cos(angle) * speed,
       y: Math.sin(angle) * speed,
     };
     this.life = 0;
-    this.maxLife = 60; // Bullet expires after 60 frames.
+    // Increased bullet lifetime for greater fire distance.
+    this.maxLife = 30;
   }
 
-  update(canvasWidth: number, canvasHeight: number) {
-    this.x += this.velocity.x;
-    this.y += this.velocity.y;
+  // Added timeScale parameter to slow bullet movement during time warp.
+  update(canvasWidth: number, canvasHeight: number, timeScale: number = 1) {
+    this.x += this.velocity.x * timeScale;
+    this.y += this.velocity.y * timeScale;
     this.life++;
 
     // Screen wrapping.
@@ -220,6 +224,8 @@ class BlackHole {
   }
 
   update() {
+    // We do not apply time warp to the black hole's timer,
+    // so its duration remains consistent in real time.
     this.timer--;
   }
 
@@ -234,6 +240,45 @@ class BlackHole {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius + 10, 0, Math.PI * 2);
     ctx.stroke();
+  }
+
+  isActive(): boolean {
+    return this.timer > 0;
+  }
+}
+
+/**
+ * The Time Warp Power-Up. When collected by the ship,
+ * it slows time for the asteroids, bullets, and other hazards.
+ */
+class TimeWarpPowerUp {
+  x: number;
+  y: number;
+  radius: number;
+  timer: number;
+
+  constructor(x: number, y: number, radius: number, lifetime: number) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.timer = lifetime;
+  }
+
+  update() {
+    this.timer--;
+  }
+
+  draw(ctx: CanvasRenderingContext2D) {
+    // Draw as a cyan circle with a "T" in the center.
+    ctx.strokeStyle = "cyan";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.font = "12px sans-serif";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.fillText("T", this.x, this.y + 4);
   }
 
   isActive(): boolean {
@@ -292,6 +337,11 @@ const AsteroidsGame: React.FC = () => {
     // Variables for the Black Hole twist.
     let blackHole: BlackHole | null = null;
     let blackHoleSpawnTimer = 600; // Frames until next black hole appears
+
+    // Variables for the Time Warp power-up twist.
+    let timeWarpPowerUp: TimeWarpPowerUp | null = null;
+    let timeWarpSpawnTimer = 800; // Frames until next time warp power-up appears
+    let timeWarpTimer = 0; // When > 0, time is slowed for hazards
 
     // Define a safe radius around the ship for asteroid spawning.
     const ASTEROID_SAFE_RADIUS = 150;
@@ -354,9 +404,12 @@ const AsteroidsGame: React.FC = () => {
       asteroids = [];
       bullets = [];
       spawnAsteroids(level + 3);
-      // Reset black hole timers.
+      // Reset black hole and time warp timers.
       blackHole = null;
       blackHoleSpawnTimer = 600;
+      timeWarpPowerUp = null;
+      timeWarpSpawnTimer = 800;
+      timeWarpTimer = 0;
     };
 
     // Input handling.
@@ -412,7 +465,7 @@ const AsteroidsGame: React.FC = () => {
         ctx.fillText("Use the arrow keys to steer and thrust.", canvasWidth / 2, canvasHeight / 2 - 60);
         ctx.fillText("Press Space to fire bullets.", canvasWidth / 2, canvasHeight / 2 - 30);
         ctx.fillText("Avoid or destroy asteroids to earn points.", canvasWidth / 2, canvasHeight / 2);
-        ctx.fillText("Beware of mysterious Black Holes that appear!", canvasWidth / 2, canvasHeight / 2 + 30);
+        ctx.fillText("Beware of mysterious Black Holes and grab Time Warp power-ups!", canvasWidth / 2, canvasHeight / 2 + 30);
         // Start Prompt: Bold and slightly larger.
         ctx.font = "bold 28px sans-serif";
         ctx.fillText("Press Enter to Start", canvasWidth / 2, canvasHeight / 2 + 90);
@@ -425,12 +478,24 @@ const AsteroidsGame: React.FC = () => {
       ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
       // Pre-Black Hole Warning:
-      // If there is no active black hole and the spawn timer is low, warn the player.
       if (!blackHole && blackHoleSpawnTimer < 120) {
         ctx.fillStyle = "red";
         ctx.font = "bold 24px sans-serif";
         ctx.textAlign = "center";
         ctx.fillText("Warning: Black Hole Incoming!", canvasWidth / 2, 50);
+      }
+
+      // Time Warp Power-Up drawing.
+      if (timeWarpPowerUp) {
+        timeWarpPowerUp.draw(ctx);
+      }
+
+      // On-screen indicator for active Time Warp.
+      if (timeWarpTimer > 0) {
+        ctx.fillStyle = "cyan";
+        ctx.font = "bold 20px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("Time Warp Active!", canvasWidth / 2, canvasHeight - 30);
       }
 
       // Game Over screen.
@@ -454,6 +519,14 @@ const AsteroidsGame: React.FC = () => {
       if (respawnTimer > 0) respawnTimer--;
       if (pauseTimer > 0) pauseTimer--;
 
+      // Update global Time Warp effect timer.
+      if (timeWarpTimer > 0) {
+        timeWarpTimer--;
+      }
+
+      // Determine the time scale: if time warp is active, slow hazards.
+      const timeScale = timeWarpTimer > 0 ? 0.5 : 1;
+
       // Black Hole spawning logic.
       if (!blackHole) {
         blackHoleSpawnTimer--;
@@ -465,6 +538,28 @@ const AsteroidsGame: React.FC = () => {
           } while (getDistance(bhX, bhY, ship.x, ship.y) < 100);
           // Black hole appears with a radius of 30 and lasts for 180 frames (~3 seconds).
           blackHole = new BlackHole(bhX, bhY, 30, 180);
+        }
+      }
+
+      // Time Warp power-up spawning logic.
+      if (!timeWarpPowerUp) {
+        timeWarpSpawnTimer--;
+        if (timeWarpSpawnTimer <= 0) {
+          let twX, twY;
+          do {
+            twX = Math.random() * canvasWidth;
+            twY = Math.random() * canvasHeight;
+          } while (getDistance(twX, twY, ship.x, ship.y) < 100);
+          // The power-up lasts for 300 frames if not collected.
+          timeWarpPowerUp = new TimeWarpPowerUp(twX, twY, 15, 300);
+          // Reset spawn timer for the next power-up.
+          timeWarpSpawnTimer = 1000;
+        }
+      } else {
+        // Update the power-up; remove it if its lifetime is over.
+        timeWarpPowerUp.update();
+        if (!timeWarpPowerUp.isActive()) {
+          timeWarpPowerUp = null;
         }
       }
 
@@ -498,10 +593,17 @@ const AsteroidsGame: React.FC = () => {
         }
       }
 
+      // Check if the ship collects the Time Warp power-up.
+      if (timeWarpPowerUp && getDistance(ship.x, ship.y, timeWarpPowerUp.x, timeWarpPowerUp.y) < ship.radius + timeWarpPowerUp.radius) {
+        // Activate time warp effect for 600 frames (longer duration).
+        timeWarpTimer = 600;
+        timeWarpPowerUp = null;
+      }
+
       // Update and draw bullets.
       for (let i = bullets.length - 1; i >= 0; i--) {
         const bullet = bullets[i];
-        bullet.update(canvasWidth, canvasHeight);
+        bullet.update(canvasWidth, canvasHeight, timeScale);
         bullet.draw(ctx);
         if (bullet.life > bullet.maxLife) {
           bullets.splice(i, 1);
@@ -511,13 +613,12 @@ const AsteroidsGame: React.FC = () => {
       // Update and draw asteroids.
       for (let i = asteroids.length - 1; i >= 0; i--) {
         const asteroid = asteroids[i];
-        // If not in pause period, update asteroid position.
         if (pauseTimer <= 0) {
-          asteroid.update(canvasWidth, canvasHeight);
+          asteroid.update(canvasWidth, canvasHeight, timeScale);
         }
         asteroid.draw(ctx);
 
-        // If not in pause period, check for collision with the ship.
+        // Check for collision with the ship.
         if (pauseTimer <= 0 && respawnTimer <= 0) {
           if (getDistance(ship.x, ship.y, asteroid.x, asteroid.y) < ship.radius + asteroid.radius) {
             lives--;
@@ -532,7 +633,7 @@ const AsteroidsGame: React.FC = () => {
               respawnTimer = 90; // Extended invulnerability period.
               pauseTimer = 60; // Extended asteroid pause.
             }
-            break; // Only handle one collision per frame.
+            break;
           }
         }
 
