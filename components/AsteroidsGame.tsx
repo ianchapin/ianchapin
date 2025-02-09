@@ -201,6 +201,47 @@ class Bullet {
 }
 
 /**
+ * A mysterious Black Hole that appears periodically,
+ * exerting gravitational pull on the ship, asteroids, and bullets.
+ */
+class BlackHole {
+  x: number;
+  y: number;
+  radius: number;
+  duration: number;
+  timer: number;
+
+  constructor(x: number, y: number, radius: number, duration: number) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.duration = duration;
+    this.timer = duration;
+  }
+
+  update() {
+    this.timer--;
+  }
+
+  draw(ctx: CanvasRenderingContext2D) {
+    // Draw a dark circle with a glowing purple border.
+    ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "purple";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius + 10, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  isActive(): boolean {
+    return this.timer > 0;
+  }
+}
+
+/**
  * Helper function for calculating the distance between two points.
  */
 const getDistance = (x1: number, y1: number, x2: number, y2: number): number => {
@@ -247,6 +288,10 @@ const AsteroidsGame: React.FC = () => {
     let pauseTimer = 0; // Pause asteroid movement after respawn
     // Variable to control the intro screen.
     let inIntro = true;
+
+    // Variables for the Black Hole twist.
+    let blackHole: BlackHole | null = null;
+    let blackHoleSpawnTimer = 600; // Frames until next black hole appears
 
     // Define a safe radius around the ship for asteroid spawning.
     const ASTEROID_SAFE_RADIUS = 150;
@@ -309,6 +354,9 @@ const AsteroidsGame: React.FC = () => {
       asteroids = [];
       bullets = [];
       spawnAsteroids(level + 3);
+      // Reset black hole timers.
+      blackHole = null;
+      blackHoleSpawnTimer = 600;
     };
 
     // Input handling.
@@ -364,7 +412,7 @@ const AsteroidsGame: React.FC = () => {
         ctx.fillText("Use the arrow keys to steer and thrust.", canvasWidth / 2, canvasHeight / 2 - 60);
         ctx.fillText("Press Space to fire bullets.", canvasWidth / 2, canvasHeight / 2 - 30);
         ctx.fillText("Avoid or destroy asteroids to earn points.", canvasWidth / 2, canvasHeight / 2);
-        ctx.fillText("When all asteroids are destroyed, the level increases.", canvasWidth / 2, canvasHeight / 2 + 30);
+        ctx.fillText("Beware of mysterious Black Holes that appear!", canvasWidth / 2, canvasHeight / 2 + 30);
         // Start Prompt: Bold and slightly larger.
         ctx.font = "bold 28px sans-serif";
         ctx.fillText("Press Enter to Start", canvasWidth / 2, canvasHeight / 2 + 90);
@@ -375,6 +423,15 @@ const AsteroidsGame: React.FC = () => {
       // Clear the canvas.
       ctx.fillStyle = "black";
       ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+      // Pre-Black Hole Warning:
+      // If there is no active black hole and the spawn timer is low, warn the player.
+      if (!blackHole && blackHoleSpawnTimer < 120) {
+        ctx.fillStyle = "red";
+        ctx.font = "bold 24px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("Warning: Black Hole Incoming!", canvasWidth / 2, 50);
+      }
 
       // Game Over screen.
       if (gameOver) {
@@ -396,6 +453,20 @@ const AsteroidsGame: React.FC = () => {
       // Decrease timers if active.
       if (respawnTimer > 0) respawnTimer--;
       if (pauseTimer > 0) pauseTimer--;
+
+      // Black Hole spawning logic.
+      if (!blackHole) {
+        blackHoleSpawnTimer--;
+        if (blackHoleSpawnTimer <= 0) {
+          let bhX, bhY;
+          do {
+            bhX = Math.random() * canvasWidth;
+            bhY = Math.random() * canvasHeight;
+          } while (getDistance(bhX, bhY, ship.x, ship.y) < 100);
+          // Black hole appears with a radius of 30 and lasts for 180 frames (~3 seconds).
+          blackHole = new BlackHole(bhX, bhY, 30, 180);
+        }
+      }
 
       // Update ship controls.
       ship.rotation = 0;
@@ -493,6 +564,45 @@ const AsteroidsGame: React.FC = () => {
       if (asteroids.length === 0) {
         level++;
         spawnAsteroids(level + 3);
+      }
+
+      // --- Black Hole Effect ---
+      if (blackHole && blackHole.isActive()) {
+        // Draw the black hole.
+        blackHole.draw(ctx);
+        // Apply gravitational pull to ship, asteroids, and bullets.
+        const applyGravity = (obj: { x: number; y: number; velocity: { x: number; y: number } }) => {
+          const dx = blackHole!.x - obj.x;
+          const dy = blackHole!.y - obj.y;
+          const distSq = dx * dx + dy * dy;
+          // Reduced gravitational force constant.
+          const force = 1.5 / (distSq + 100);
+          obj.velocity.x += dx * force;
+          obj.velocity.y += dy * force;
+        };
+        applyGravity(ship);
+        asteroids.forEach((asteroid) => applyGravity(asteroid));
+        bullets.forEach((bullet) => applyGravity(bullet));
+
+        // Update black hole timer.
+        blackHole.update();
+        if (!blackHole.isActive()) {
+          blackHole = null;
+          blackHoleSpawnTimer = 600; // Reset spawn timer.
+        }
+      }
+
+      // --- Clamp Asteroid Speeds ---
+      // When no black hole is active, ensure asteroids don't have excessive speed.
+      if (!blackHole) {
+        const MAX_ASTEROID_SPEED = 3;
+        asteroids.forEach((asteroid) => {
+          const speed = Math.sqrt(asteroid.velocity.x ** 2 + asteroid.velocity.y ** 2);
+          if (speed > MAX_ASTEROID_SPEED) {
+            asteroid.velocity.x = (asteroid.velocity.x / speed) * MAX_ASTEROID_SPEED;
+            asteroid.velocity.y = (asteroid.velocity.y / speed) * MAX_ASTEROID_SPEED;
+          }
+        });
       }
 
       // Draw the current lives, score, and level (aligned to the top left).
