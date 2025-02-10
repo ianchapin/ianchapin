@@ -3,14 +3,15 @@ import Link from "next/link";
 const Navbar = () => {
   return (
     <header className="bg-gray-800">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        {/* Site Title */}
+      <div className="container mx-auto px-4 py-4 flex items-center">
+        {/* Site Title (Left) */}
         <div className="text-white text-xl font-bold">
           <Link href="/">Ian Chapin</Link>
         </div>
-        <nav className="flex items-center">
-          {/* Desktop Navigation */}
-          <ul className="hidden md:flex space-x-6">
+
+        {/* Navigation (Right) */}
+        <nav className="flex-1 flex justify-end items-center">
+          <ul className="flex space-x-6">
             <li>
               <Link
                 href="/projects"
