@@ -70,7 +70,7 @@ const Projects: React.FC = () => {
               </div>
               <div className="p-6">
                 <h2 className="text-2xl font-semibold mb-3 text-gray-900">
-                  Total Office Manager
+                  Total Office Manager 360
                 </h2>
                 <p className="text-gray-700">
                   Developed a comprehensive office management platform that automated scheduling, integrated accounting and payroll, and optimized field dispatching—dramatically enhancing operational efficiency in the field service industry.
