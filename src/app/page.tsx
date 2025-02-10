@@ -18,10 +18,28 @@ const Home: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
             <Link href="/resume">
-              <span className="px-6 py-3 bg-white border text-blue-600 font-semibold shadow-md hover:bg-gray-100 transition duration-200">
+              <span className="px-6 py-3 bg-white border text-blue-600 font-semibold shadow-md hover:bg-gray-100 transition duration-200 cursor-pointer">
                 View Resume
               </span>
             </Link>
+            <a
+              href="https://www.linkedin.com/in/ianchapin/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="px-6 py-3 bg-white border text-blue-600 font-semibold shadow-md hover:bg-gray-100 transition duration-200">
+                LinkedIn
+              </span>
+            </a>
+            <a
+              href="https://www.youtube.com/@ianchapin6043"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="px-6 py-3 bg-white border text-blue-600 font-semibold shadow-md hover:bg-gray-100 transition duration-200">
+                YouTube
+              </span>
+            </a>
           </div>
         </div>
 
