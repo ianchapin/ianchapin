@@ -55,6 +55,29 @@ const Projects: React.FC = () => {
               </div>
             </span>
           </Link>
+
+          {/* Total Office Manager 360 Card */}
+          <Link href="/projects/total-office-manager">
+            <span className="block bg-white shadow-md overflow-hidden hover:shadow-2xl transform hover:-translate-y-1 transition duration-300 ease-in-out">
+              <div className="relative aspect-video">
+                <Image
+                  src="/images/total-office-manager-preview.webp"
+                  alt="Total Office Manager Thumbnail"
+                  layout="fill"
+                  objectFit="cover"
+                  objectPosition="center"
+                />
+              </div>
+              <div className="p-6">
+                <h2 className="text-2xl font-semibold mb-3 text-gray-900">
+                  Total Office Manager
+                </h2>
+                <p className="text-gray-700">
+                  Developed a comprehensive office management platform that automated scheduling, integrated accounting and payroll, and optimized field dispatching—dramatically enhancing operational efficiency in the field service industry.
+                </p>
+              </div>
+            </span>
+          </Link>
         </div>
       </div>
     </div>
